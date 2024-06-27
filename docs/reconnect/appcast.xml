@@ -2,13 +2,5 @@
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
     <channel>
         <title>Reconnect</title>
-        <item>
-            <title>0.3.0</title>
-            <pubDate>Wed, 26 Jun 2024 14:23:26 -1000</pubDate>
-            <sparkle:version>240627002307691130</sparkle:version>
-            <sparkle:shortVersionString>0.3.0</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>14.5</sparkle:minimumSystemVersion>
-            <enclosure url="Reconnect-0.3.0-240627002307691130.zip" length="1608823" type="application/octet-stream" sparkle:edSignature="NX3Ub69H7DdT4vABv4WxOkxL8CquxmciX2KbGubrhOq9oiKXHxFNgOoIkZUR8Fbn1MD4ENE+8GA06S0lFS1WBw=="/>
-        </item>
     </channel>
 </rss>
