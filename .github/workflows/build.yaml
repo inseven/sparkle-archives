@@ -22,7 +22,7 @@ jobs:
 
     - name: Build documentation
       run: |
-        python3 scripts/build.py
+        python3 scripts/build.py _site
         chmod -v -R +rX "_site/"
 
     - name: Upload Pages artifact
