@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import shutil
 
 import requests
 
@@ -52,9 +53,25 @@ def generate_appcast(owner, repo, output_path):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('output')
     options = parser.parse_args()
 
-    generate_appcast('inseven', 'reconnect', 'docs/reconnect/appcast.xml')
+    # Clean up previous builds if necessary.
+    output_path = os.path.abspath(options.output)
+    if os.path.exists(output_path):
+        shutil.rmtree(output_path)
+
+    # Create the output path.
+    os.makedirs(output_path)
+
+    repositories = [
+        ('inseven', 'reconnect')
+    ]
+
+    for (owner, repo) in repositories:
+        appcast_directory = os.path.join(output_path, owner, repo)
+        os.makedirs(appcast_directory)
+        generate_appcast('inseven', 'reconnect', os.path.join(appcast_directory, 'appcast.xml'))
 
 
 if __name__ == "__main__":
