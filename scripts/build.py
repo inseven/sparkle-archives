@@ -3,6 +3,7 @@
 import argparse
 import os
 import shutil
+import urllib.parse
 
 import requests
 
@@ -42,7 +43,9 @@ def generate_appcast(owner, repo, output_path):
                 items = root.findall('.//item')
                 for item in items:
                     enclosure = item.find('./enclosure')
-                    enclosure.set('url', enclosure.get('url'))
+                    url = enclosure.get('url')
+                    asset_name = os.path.basename(urllib.parse.urlparse(url).path)
+                    enclosure.set('url', assets[asset_name])
                     appcast_channel.append(item)
 
     root = ET.ElementTree(appcast)
