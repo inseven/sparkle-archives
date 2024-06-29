@@ -75,6 +75,7 @@ def main():
         appcast_directory = os.path.join(output_path, owner, repo)
         os.makedirs(appcast_directory)
         generate_appcast('inseven', 'reconnect', os.path.join(appcast_directory, 'appcast.xml'))
+        generate_appcast('inseven', 'incontext', os.path.join(appcast_directory, 'appcast.xml'))
 
 
 if __name__ == "__main__":
