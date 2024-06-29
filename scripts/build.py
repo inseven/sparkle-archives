@@ -21,10 +21,13 @@ APPCAST_TEMPLATE = """<?xml version="1.0" standalone="yes"?>
 """
 
 
-def generate_appcast(owner, repo, output_path):
+def generate_appcast(owner, repo, title, output_path):
 
     appcast = ET.fromstring(APPCAST_TEMPLATE)
+    appcast_title = appcast.find(".//title")
     appcast_channel = appcast.find(".//channel")
+
+    appcast_title.text = title
 
     url = f"https://api.github.com/repos/{owner}/{repo}/releases"
     response = requests.get(url)
@@ -68,14 +71,14 @@ def main():
     os.makedirs(output_path)
 
     repositories = [
-        ('inseven', 'reconnect'),
-        ('inseven', 'incontext'),
+        ('inseven', 'reconnect', 'Reconnect'),
+        ('inseven', 'incontext', 'InContext Helper'),
     ]
 
-    for (owner, repo) in repositories:
+    for (owner, repo, title) in repositories:
         appcast_directory = os.path.join(output_path, owner, repo)
         os.makedirs(appcast_directory)
-        generate_appcast(owner, repo, os.path.join(appcast_directory, 'appcast.xml'))
+        generate_appcast(owner, repo, title, os.path.join(appcast_directory, 'appcast.xml'))
 
 
 if __name__ == "__main__":
