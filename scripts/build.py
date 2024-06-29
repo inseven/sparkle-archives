@@ -68,8 +68,8 @@ def main():
     os.makedirs(output_path)
 
     repositories = [
-        ('inseven', 'reconnect')
-        ('inseven', 'incontext')
+        ('inseven', 'reconnect'),
+        ('inseven', 'incontext'),
     ]
 
     for (owner, repo) in repositories:
