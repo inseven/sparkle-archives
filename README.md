@@ -8,5 +8,6 @@ Generate and publish Sparkle appcasts
 
 Generates appcasts for the following apps:
 
+- [Folders](https://folders.jbmorley.co.uk)
 - [InContext Helper](https://incontext.app)
 - [Reconnect](https://github.com/inseven/reconnect)
