@@ -73,6 +73,7 @@ def main():
     repositories = [
         ('inseven', 'reconnect', 'Reconnect'),
         ('inseven', 'incontext', 'InContext Helper'),
+        ('inseven', 'folders', 'Folders'),
     ]
 
     for (owner, repo, title) in repositories:
