@@ -37,5 +37,3 @@ repositories = [
     ('inseven', 'thoughts', 'Thoughts'),
 ]
 ```
-
-
