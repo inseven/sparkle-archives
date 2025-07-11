@@ -71,9 +71,10 @@ def main():
     os.makedirs(output_path)
 
     repositories = [
-        ('inseven', 'reconnect', 'Reconnect'),
-        ('inseven', 'incontext', 'InContext Helper'),
+        ('inseven', 'fileaway', 'Fileaway'),
         ('inseven', 'folders', 'Folders'),
+        ('inseven', 'incontext', 'InContext Helper'),
+        ('inseven', 'reconnect', 'Reconnect'),
         ('inseven', 'thoughts', 'Thoughts'),
     ]
 

@@ -8,6 +8,7 @@ Generate and publish Sparkle appcasts
 
 Generates appcasts for the following apps:
 
+- [Fileaway](https://fileaway.jbmorley.co.uk)
 - [Folders](https://folders.jbmorley.co.uk)
 - [InContext Helper](https://incontext.jbmorley.co.uk)
 - [Reconnect](https://reconnect.jbmorley.co.uk)
@@ -31,9 +32,10 @@ Right now the list of apps is hardcoded in `scripts/build.py`. Adding an app is 
 
 ```python
 repositories = [
-    ('inseven', 'reconnect', 'Reconnect'),
-    ('inseven', 'incontext', 'InContext Helper'),
+    ('inseven', 'fileaway', 'Fileaway'),
     ('inseven', 'folders', 'Folders'),
+    ('inseven', 'incontext', 'InContext Helper'),
+    ('inseven', 'reconnect', 'Reconnect'),
     ('inseven', 'thoughts', 'Thoughts'),
 ]
 ```
