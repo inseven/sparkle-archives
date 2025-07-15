@@ -23,6 +23,8 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Build documentation
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python3 scripts/build.py _site
         chmod -v -R +rX "_site/"

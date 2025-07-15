@@ -3,6 +3,7 @@
 import argparse
 import os
 import shutil
+import time
 import urllib.parse
 
 import requests
@@ -29,9 +30,32 @@ def generate_appcast(owner, repo, title, output_path):
 
     appcast_title.text = title
 
+    # Default API headers.
     url = f"https://api.github.com/repos/{owner}/{repo}/releases"
-    response = requests.get(url)
-    response.raise_for_status()
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+    # Use a GitHub token if it's present in the environment as this is likely to have fewer rate limits.
+    if "GITHUB_TOKEN" in os.environ:
+        headers["Authorization"] = f"Bearer {os.environ["GITHUB_TOKEN"]}"
+
+    # Fetch the required data with an exponential backoff (max 5m) if we hit a 403 rate limit.
+    attempt = 1
+    while True:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            break
+        elif response.status_code == 403:
+            sleep_duration_s = min(300, 2 ** attempt)
+            logging.info(f"Waiting {sleep_duration_s}s for GitHub API rate limits...")
+            time.sleep(sleep_duration_s)
+            attempt += 1
+            continue
+        else:
+            response.raise_for_status()
+
     releases = response.json()
     if releases:
         for release in releases:
