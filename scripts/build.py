@@ -99,6 +99,7 @@ def main():
         ('inseven', 'folders', 'Folders'),
         ('inseven', 'incontext', 'InContext Helper'),
         ('inseven', 'reconnect', 'Reconnect'),
+        ('inseven', 'symbolic', 'Symbolic'),
         ('inseven', 'thoughts', 'Thoughts'),
     ]
 

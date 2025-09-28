@@ -12,6 +12,7 @@ Generates appcasts for the following apps:
 - [Folders](https://folders.jbmorley.co.uk)
 - [InContext Helper](https://incontext.jbmorley.co.uk)
 - [Reconnect](https://reconnect.jbmorley.co.uk)
+- [Symbolic](https://symbolic.jbmorley.co.uk)
 - [Thoughts](https://thoughts.jbmorley.co.uk)
 
 ## Service
