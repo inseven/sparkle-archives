@@ -98,6 +98,7 @@ def main():
         ('inseven', 'fileaway', 'Fileaway'),
         ('inseven', 'folders', 'Folders'),
         ('inseven', 'incontext', 'InContext Helper'),
+        ('inseven', 'overview', 'Overview'),
         ('inseven', 'reconnect', 'Reconnect'),
         ('inseven', 'symbolic', 'Symbolic'),
         ('inseven', 'thoughts', 'Thoughts'),
