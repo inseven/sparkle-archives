@@ -65,7 +65,8 @@ def generate_appcast(owner, repo, title, output_path):
             assets = {asset['name']: asset['browser_download_url'] for asset in release.get('assets', [])}
             if 'appcast.xml' in assets:
                 print(f"{owner}/{repo} {release_name}")
-                appcast_response = requests.get(assets['appcast.xml'])
+                appcast_response = requests.get(assets['appcast.xml'], headers=headers)
+                appcast_response.raise_for_status()
                 root = ET.fromstring(appcast_response.content)
                 items = root.findall('.//item')
                 for item in items:
