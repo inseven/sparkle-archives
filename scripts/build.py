@@ -102,6 +102,7 @@ def main():
         ('inseven', 'overview', 'Overview'),
         ('inseven', 'reconnect', 'Reconnect'),
         ('inseven', 'symbolic', 'Symbolic'),
+        ('inseven', 'taillight', 'TailLight'),
         ('inseven', 'thoughts', 'Thoughts'),
     ]
 

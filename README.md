@@ -14,6 +14,7 @@ Generates appcasts for the following apps:
 - [Overview](https://overview.jbmorley.co.uk)
 - [Reconnect](https://reconnect.jbmorley.co.uk)
 - [Symbolic](https://symbolic.jbmorley.co.uk)
+- [TailLight](https://github.com/inseven/taillight)
 - [Thoughts](https://thoughts.jbmorley.co.uk)
 
 ## Service
