@@ -104,6 +104,7 @@ def main():
         ('inseven', 'symbolic', 'Symbolic'),
         ('inseven', 'taillight', 'TailLight'),
         ('inseven', 'thoughts', 'Thoughts'),
+        ('inseven', 'tinyboard', 'TinyBoard'),
     ]
 
     for (owner, repo, title) in repositories:
