@@ -16,6 +16,7 @@ Generates appcasts for the following apps:
 - [Symbolic](https://symbolic.jbmorley.co.uk)
 - [TailLight](https://github.com/inseven/taillight)
 - [Thoughts](https://thoughts.jbmorley.co.uk)
+- [TinyBoard](https://tinyboard.jbmorley.co.uk)
 
 ## Service
 
@@ -31,14 +32,4 @@ e.g., The appcast for Thoughts is located at [https://sparkle.jbmorley.co.uk/ins
 
 ## Development
 
-Right now the list of apps is hardcoded in `scripts/build.py`. Adding an app is a matter of adding an entry to the `repositories` variable. For example,
-
-```python
-repositories = [
-    ('inseven', 'fileaway', 'Fileaway'),
-    ('inseven', 'folders', 'Folders'),
-    ('inseven', 'incontext', 'InContext Helper'),
-    ('inseven', 'reconnect', 'Reconnect'),
-    ('inseven', 'thoughts', 'Thoughts'),
-]
-```
+Right now the list of apps is hardcoded in `scripts/build.py`. Adding an app is a matter of adding an entry to the `repositories` variable.
