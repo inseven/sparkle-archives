@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 import argparse
+import logging
 import os
 import shutil
+import sys
 import time
 import urllib.parse
 
@@ -10,7 +12,8 @@ import requests
 
 import xml.etree.ElementTree as ET
 
-MAX_RETRIES = 20
+ACCEPT_JSON = "application/vnd.github+json"
+ACCEPT_STREAM = "application/octet-stream"
 
 APPCAST_TEMPLATE = """<?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
@@ -24,6 +27,62 @@ APPCAST_TEMPLATE = """<?xml version="1.0" standalone="yes"?>
 ET.register_namespace('sparkle', 'http://www.andymatuschak.org/xml-namespaces/sparkle')
 
 
+def spinning_cursor():
+    while True:
+        for cursor in ["zzzz", "Zzzz", "zZzz", "zzZz", "zzzZ"]:
+            yield cursor
+
+
+class Sleeper:
+
+    def __init__(self):
+        self.polling_duration = 0.2
+        self.duration = 0
+        self.did_sleep = False
+        self.spinner = spinning_cursor()
+        self.is_interactive = sys.stdout.isatty()
+
+    def sleep(self, duration):
+        self.did_sleep = True
+        self.duration = duration
+        while self.duration > 0:
+            if self.is_interactive:
+                print("\r", end="")
+                print(next(self.spinner), end="")
+            time.sleep(self.polling_duration)
+            self.duration = self.duration - self.polling_duration
+
+    def finalize(self):
+        if self.did_sleep and self.is_interactive:
+            print("\r", end="")
+
+
+def perform_with_backoff(fn, url, accept, *args, **kwargs):
+    if "headers" not in kwargs:
+        kwargs["headers"] = {}
+    kwargs["headers"]["Accept"] = accept
+    kwargs["headers"]["X-GitHub-Api-Version"] = "2022-11-28"
+    if "GITHUB_TOKEN" in os.environ:
+        kwargs["headers"]["Authorization"] = f"Bearer {os.environ["GITHUB_TOKEN"]}"
+    kwargs["allow_redirects"] = True
+    sleeper = Sleeper()
+    duration = 8
+    while True:
+        logging.debug(f"GET {url}")
+        try:
+            response = fn(url, *args, **kwargs)
+            if not response.status_code in [403, 429, 500, 502, 504]:
+                break
+        except http.client.RemoteDisconnected:
+            pass
+        did_wait = True
+        sleeper.sleep(duration)
+        duration = min(duration * 2, 60)
+    response.raise_for_status()
+    sleeper.finalize()
+    return response
+
+
 def generate_appcast(owner, repo, title, output_path):
 
     appcast = ET.fromstring(APPCAST_TEMPLATE)
@@ -32,35 +91,7 @@ def generate_appcast(owner, repo, title, output_path):
 
     appcast_title.text = title
 
-    # Default API headers.
-    url = f"https://api.github.com/repos/{owner}/{repo}/releases"
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    }
-
-    # Use a GitHub token if it's present in the environment as this is likely to have fewer rate limits.
-    if "GITHUB_TOKEN" in os.environ:
-        headers["Authorization"] = f"Bearer {os.environ["GITHUB_TOKEN"]}"
-
-    # Fetch the required data with an exponential backoff (max 5m) if we hit a 403 rate limit.
-    attempt = 1
-    while True:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            break
-        elif response.status_code in [403, 500] and attempt <= MAX_RETRIES:
-            sleep_duration_s = min(300, 2 ** attempt)
-            logging.info("Waiting %ds for transient GitHub HTTP %d error (attempt %d)...",
-                         sleep_duration_s,
-                         response.status_code,
-                         attempt)
-            time.sleep(sleep_duration_s)
-            attempt += 1
-            continue
-        else:
-            response.raise_for_status()
-
+    response = perform_with_backoff(requests.get, f"https://api.github.com/repos/{owner}/{repo}/releases", ACCEPT_JSON)
     releases = response.json()
     if releases:
         for release in releases:
@@ -70,7 +101,7 @@ def generate_appcast(owner, repo, title, output_path):
             assets = {asset['name']: asset['browser_download_url'] for asset in release.get('assets', [])}
             if 'appcast.xml' in assets:
                 print(f"{owner}/{repo} {release_name}")
-                appcast_response = requests.get(assets['appcast.xml'], headers=headers)
+                appcast_response = perform_with_backoff(requests.get, assets['appcast.xml'], ACCEPT_STREAM)
                 appcast_response.raise_for_status()
                 root = ET.fromstring(appcast_response.content)
                 items = root.findall('.//item')
