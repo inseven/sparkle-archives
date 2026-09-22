@@ -10,8 +10,7 @@ import requests
 
 import xml.etree.ElementTree as ET
 
-ET.register_namespace('sparkle', 'http://www.andymatuschak.org/xml-namespaces/sparkle')
-
+MAX_RETRIES = 20
 
 APPCAST_TEMPLATE = """<?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
@@ -20,6 +19,9 @@ APPCAST_TEMPLATE = """<?xml version="1.0" standalone="yes"?>
     </channel>
 </rss>
 """
+
+
+ET.register_namespace('sparkle', 'http://www.andymatuschak.org/xml-namespaces/sparkle')
 
 
 def generate_appcast(owner, repo, title, output_path):
@@ -47,9 +49,12 @@ def generate_appcast(owner, repo, title, output_path):
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             break
-        elif response.status_code == 403:
+        elif response.status_code in [403, 500] and attempt <= MAX_RETRIES:
             sleep_duration_s = min(300, 2 ** attempt)
-            logging.info(f"Waiting {sleep_duration_s}s for GitHub API rate limits...")
+            logging.info("Waiting %ds for transient GitHub HTTP %d error (attempt %d)...",
+                         sleep_duration_s,
+                         response.status_code,
+                         attempt)
             time.sleep(sleep_duration_s)
             attempt += 1
             continue
