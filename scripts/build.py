@@ -10,7 +10,7 @@ import requests
 
 import xml.etree.ElementTree as ET
 
-MAX_RETRIES = 20;
+MAX_RETRIES = 20
 
 APPCAST_TEMPLATE = """<?xml version="1.0" standalone="yes"?>
 <rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
